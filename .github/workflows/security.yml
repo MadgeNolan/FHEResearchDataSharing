@@ -1,0 +1,161 @@
+name: Security Audit
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  schedule:
+    # Run security audit every Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  dependency-audit:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Check for known vulnerabilities
+        run: |
+          echo "Checking for security vulnerabilities..."
+          npm audit --json > audit-report.json || true
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: audit-report.json
+          retention-days: 30
+
+  contract-security:
+    name: Smart Contract Security Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile contracts
+        run: npm run compile
+
+      - name: Run Solhint security checks
+        run: npm run lint:sol
+        continue-on-error: false
+
+      - name: Check for common vulnerabilities
+        run: |
+          echo "Checking for reentrancy patterns..."
+          ! grep -r "call{value:" contracts/ || echo "Warning: Low-level call detected"
+
+          echo "Checking for delegatecall usage..."
+          ! grep -r "delegatecall" contracts/ || echo "Warning: delegatecall detected"
+
+          echo "Checking for selfdestruct..."
+          ! grep -r "selfdestruct" contracts/ || echo "Info: selfdestruct found"
+
+          echo "Checking for tx.origin..."
+          ! grep -r "tx.origin" contracts/ && echo "✓ No tx.origin usage" || echo "Warning: tx.origin detected"
+
+      - name: Check for hardcoded addresses
+        run: |
+          echo "Checking for hardcoded addresses..."
+          ! grep -rE "0x[a-fA-F0-9]{40}" contracts/*.sol || echo "Warning: Hardcoded address detected"
+
+  code-scanning:
+    name: Code Security Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint security checks
+        run: npx eslint . --ext .js --max-warnings 0
+        continue-on-error: true
+
+      - name: Check for sensitive data
+        run: |
+          echo "Checking for potential secrets..."
+          ! grep -rE "(private|secret|password|api[_-]?key)" --include="*.js" --include="*.json" . || echo "Warning: Potential secrets detected"
+
+          echo "Checking .env files are gitignored..."
+          grep -q "^\.env$" .gitignore && echo "✓ .env is gitignored" || echo "Error: .env not in .gitignore"
+
+  gas-analysis:
+    name: Gas Optimization Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with gas reporting
+        run: REPORT_GAS=true npm test
+        continue-on-error: true
+
+      - name: Upload gas report
+        uses: actions/upload-artifact@v4
+        with:
+          name: gas-report
+          path: gas-report.txt
+          retention-days: 30
+        if: always()
