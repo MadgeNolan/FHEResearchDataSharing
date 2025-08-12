@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+artifacts/
+cache/
+coverage/
+dist/
+out/
+build/
+
+# TypeChain
+typechain/
+typechain-types/
+
+# Deployment artifacts
+deployments/
+reports/
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Git
+.git/
+.gitignore
