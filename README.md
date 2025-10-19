@@ -9,7 +9,7 @@
 
 **A privacy-preserving scientific data platform powered by Zama's Fully Homomorphic Encryption (FHE) technology, enabling secure and anonymous research data collaboration on Ethereum Sepolia.**
 
-🌐 **[Live Demo](https://anonymous-research-data-sharing.vercel.app/)** | 📺 **[Video Demo](./AnonymousResearchDataSharing.mp4)** | 📜 **[Contract on Sepolia](https://sepolia.etherscan.io/address/0x13782134cE8cA22C432bb636B401884806799AD2)**
+🌐 **[Live Demo](https://fhe-research-data-sharing.vercel.app/)** | 📺 **[Video Demo demo.mp4]** | 📜 **[Contract on Sepolia](https://sepolia.etherscan.io/address/0x13782134cE8cA22C432bb636B401884806799AD2)**
 
 ---
 
@@ -384,7 +384,7 @@ distributeReward(
 
 ### Try It Now
 
-🚀 **[Live Application](https://anonymous-research-data-sharing.vercel.app/)**
+🚀 **[Live Application](https://fhe-research-data-sharing.vercel.app/)**
 
 **Network Details:**
 - **Network**: Sepolia Testnet (Chain ID: 11155111)
@@ -405,7 +405,7 @@ distributeReward(
   "deployer": "0x...",
   "deploymentTime": "2025-01-XX",
   "verificationStatus": "Verified on Etherscan",
-  "frontendUrl": "https://anonymous-research-data-sharing.vercel.app/"
+  "frontendUrl": "https://fhe-research-data-sharing.vercel.app/"
 }
 ```
 
@@ -824,6 +824,6 @@ in the Software without restriction...
 
 Built with ❤️ using [Zama's fhEVM](https://www.zama.ai/fhevm)
 
-**[Live Demo](https://anonymous-research-data-sharing.vercel.app/)** • **[Documentation](./DEPLOYMENT.md)** • **[Tests](./TESTING.md)** • **[Security](./SECURITY.md)**
+**[Live Demo](https://fhe-research-data-sharing.vercel.app/)** • **[Documentation](./DEPLOYMENT.md)** • **[Tests](./TESTING.md)** • **[Security](./SECURITY.md)**
 
 </div>
