@@ -1,0 +1,19 @@
+{
+  "name": "research-data-sharing-example",
+  "version": "1.0.0",
+  "description": "Privacy-preserving research data sharing platform using FHEVM SDK",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fhevm/sdk": "workspace:*",
+    "@fhevm/solidity": "^0.2.0",
+    "ethers": "^6.4.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}

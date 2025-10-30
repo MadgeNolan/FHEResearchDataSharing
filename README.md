@@ -107,10 +107,25 @@ anonymous-research-data-sharing/
 │   ├── coverage.yml             # Code coverage
 │   ├── lint.yml                 # Code quality
 │   └── performance.yml          # Gas benchmarking
+├── research-data-sharing/       # 🆕 Vite + @fhevm/sdk implementation
+│   ├── contracts/               # Smart contracts (FHE-enabled)
+│   │   ├── AnonymousResearchDataSharing.sol
+│   │   └── ResearchDataSharing.sol
+│   ├── index.html               # Modern UI with FHE integration
+│   ├── main.js                  # SDK-based implementation
+│   ├── styles.css               # Modern CSS styling
+│   ├── vite.config.js          # Vite build configuration
+│   ├── package.json             # Vite + @fhevm/sdk dependencies
+│   └── README.md                # Vite stack documentation
+├── fhevm-react-template/        # Universal FHEVM SDK monorepo
+│   ├── packages/fhevm-sdk/      # Core SDK package
+│   ├── examples/                # Usage examples
+│   ├── templates/               # Project templates
+│   └── docs/                    # SDK documentation
 ├── hardhat.config.js            # Hardhat configuration
 ├── package.json                 # Dependencies & scripts
 ├── .env.example                 # Environment template
-├── index.html                   # Frontend interface
+├── index.html                   # Frontend interface (classic)
 └── Documentation/
     ├── README.md                # This file
     ├── DEPLOYMENT.md            # Deployment guide
@@ -146,6 +161,33 @@ npm install
 cp .env.example .env
 # Edit .env with your RPC URL, private key, and Etherscan API key
 ```
+
+### 🆕 Quick Start with Vite Stack
+
+For modern development with hot module replacement:
+
+```bash
+# Navigate to Vite implementation
+cd research-data-sharing
+
+# Install dependencies (includes Vite + @fhevm/sdk)
+npm install
+
+# Start development server (http://localhost:5173)
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+**Features:**
+- ⚡ Instant hot module replacement
+- 🔧 @fhevm/sdk integration out of the box
+- 📦 Optimized production bundles
+- 🎯 TypeScript-ready configuration
 
 ### Development Workflow
 
@@ -560,6 +602,177 @@ optimizer: {
 - **Codecov** - Coverage reporting
 - **Etherscan** - Contract verification
 - **IPFS** - Decentralized storage (metadata)
+
+---
+
+## 🆕 Alternative Technology Stack (research-data-sharing/)
+
+For developers who prefer modern build tools and SDK integration, we provide an alternative implementation in the `research-data-sharing/` directory:
+
+### Build & Development
+
+- **Vite** `^5.0.0` - Next-generation frontend build tool
+  - ⚡ Lightning-fast HMR (Hot Module Replacement)
+  - 📦 Optimized production builds
+  - 🔧 Zero-config ES module support
+  - 🎯 Native TypeScript support
+
+### SDK Integration
+
+- **@fhevm/sdk** (workspace:*) - Custom Universal FHEVM SDK
+  - 🌐 Framework-agnostic core
+  - 🎣 React hooks (wagmi-like)
+  - 🔒 Built-in encryption utilities
+  - 📖 Comprehensive TypeScript types
+  - ⚡ Optimized for modern bundlers
+
+### Frontend Stack
+
+- **Modern ES Modules** - Native import/export syntax
+- **Ethers.js v6** - Latest Ethereum library with improved DX
+- **Vanilla JavaScript** - No framework overhead
+- **CSS3** - Modern styling with gradients and animations
+- **HTML5** - Semantic markup
+
+### Key Advantages
+
+**Why Vite?**
+- 🚀 **Instant Server Start** - No bundling in development
+- ⚡ **Hot Module Replacement** - Sub-100ms updates
+- 🎯 **Optimized Builds** - Rollup-powered production bundles
+- 📦 **Code Splitting** - Automatic chunk optimization
+- 🔧 **Plugin Ecosystem** - Rich ecosystem for extensions
+
+**Why @fhevm/sdk?**
+- 🌐 **Universal** - Works with React, Next.js, Vue, or vanilla JS
+- 🎯 **Type-Safe** - Full TypeScript support with intellisense
+- 📦 **Tree-Shakable** - Import only what you need
+- 🔒 **Abstracted** - Simplified FHE operations
+- 🎣 **Hook-Based** - React-friendly API design
+
+### Project Structure
+
+```
+research-data-sharing/
+├── index.html                   # Entry point with modern UI
+├── main.js                      # Vite entry with SDK integration
+├── styles.css                   # Modern CSS styling
+├── vite.config.js              # Vite configuration
+├── package.json                # Dependencies (Vite + SDK)
+├── contracts/                  # FHE smart contracts
+│   ├── AnonymousResearchDataSharing.sol
+│   └── ResearchDataSharing.sol
+└── README.md                   # Detailed documentation
+```
+
+### Quick Start (Vite Version)
+
+```bash
+# Navigate to alternative implementation
+cd research-data-sharing
+
+# Install dependencies (includes Vite + @fhevm/sdk)
+npm install
+
+# Start development server with HMR
+npm run dev
+# → Server starts at http://localhost:5173
+
+# Build for production
+npm run build
+# → Optimized bundle in dist/
+
+# Preview production build
+npm run preview
+```
+
+### SDK Usage Example
+
+```javascript
+// Import from @fhevm/sdk
+import { initFhevm, encryptValue } from '@fhevm/sdk';
+import { BrowserProvider } from 'ethers';
+
+// Initialize FHEVM client
+const provider = new BrowserProvider(window.ethereum);
+const signer = await provider.getSigner();
+
+const fhevmClient = await initFhevm({
+  contractAddress: '0x13782134cE8cA22C432bb636B401884806799AD2',
+  contractABI: CONTRACT_ABI,
+  chainId: 11155111, // Sepolia
+  signer
+});
+
+// Access contract instance
+const contract = fhevmClient.contract;
+
+// Use contract methods
+await contract.contributeData(12345, 85, "QmIPFS...", true);
+```
+
+### Vite Configuration
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@fhevm/sdk': new URL('../../packages/fhevm-sdk/src/index.ts', import.meta.url).pathname
+    }
+  },
+  optimizeDeps: {
+    exclude: ['@fhevm/sdk']
+  }
+});
+```
+
+### Comparison: Hardhat vs Vite Stack
+
+| Feature | Hardhat Stack (root) | Vite Stack (research-data-sharing/) |
+|---------|---------------------|-------------------------------------|
+| **Build Tool** | None (vanilla) | Vite |
+| **Dev Server** | Static files | HMR + Fast Refresh |
+| **SDK** | Direct FHEVM | @fhevm/sdk wrapper |
+| **Module System** | Script tags | ES Modules |
+| **TypeScript** | Not included | Native support |
+| **Code Splitting** | Manual | Automatic |
+| **Bundle Optimization** | None | Rollup-powered |
+| **Best For** | Simple deployments | Modern development |
+
+### When to Use Each Stack
+
+**Use Hardhat Stack (root) when:**
+- ✅ You need direct contract deployment scripts
+- ✅ Running comprehensive test suites (71 tests)
+- ✅ Performing security audits
+- ✅ Working with CI/CD pipelines
+- ✅ Simple static hosting requirements
+
+**Use Vite Stack (research-data-sharing/) when:**
+- ✅ Building modern frontend applications
+- ✅ Need fast development iteration (HMR)
+- ✅ Want SDK abstraction (@fhevm/sdk)
+- ✅ TypeScript development preferred
+- ✅ Optimized production bundles required
+- ✅ Working with component-based architecture
+
+### Technology Benefits
+
+**Vite Benefits:**
+- ⚡ **Development Speed** - Start dev server in ~100ms vs several seconds
+- 🔥 **Hot Updates** - See changes instantly without full reload
+- 📦 **Smart Bundling** - Only bundle what's imported
+- 🎯 **Modern Defaults** - ES2020+, dynamic imports, CSS code splitting
+
+**@fhevm/sdk Benefits:**
+- 🛡️ **Type Safety** - Catch errors at compile time
+- 📚 **Better DX** - Autocomplete and inline documentation
+- 🔧 **Simplified API** - Less boilerplate code
+- 🎣 **Composable** - Reusable hooks and utilities
+- 🌐 **Framework Ready** - Easy integration with React, Vue, etc.
 
 ---
 

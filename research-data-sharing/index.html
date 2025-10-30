@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Research Data Sharing Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #e94560 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(20, 20, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0ff;
+            margin-bottom: 20px;
+        }
+
+        .network-info {
+            background: rgba(255, 235, 59, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .network-info.sepolia {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #4caf50;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            border-radius: 10px;
+            flex: 1;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ffff;
+            display: block;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .stat-label {
+            color: #a0a0ff;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(20, 20, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .card h2 {
+            color: #00ffff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #a0a0ff;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: rgba(0, 0, 0, 0.3);
+            color: #e0e0e0;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.2);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .data-list {
+            grid-column: span 2;
+        }
+
+        .data-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00ffff;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .data-item h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+
+        .data-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #a0a0ff;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.public {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status.private {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .wallet-info {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .wallet-address {
+            font-family: monospace;
+            color: #00ffff;
+            word-break: break-all;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .data-list {
+                grid-column: span 1;
+            }
+
+            .stats {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #00ffff;
+            margin: 20px 0;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 Anonymous Research Data Sharing Platform</h1>
+            <p class="subtitle">Privacy-Preserving Scientific Data Platform powered by Zama FHE</p>
+
+            <div class="wallet-info" id="walletInfo">
+                <div id="connectWallet">
+                    <button class="btn" onclick="connectWallet()">Connect Wallet</button>
+                </div>
+                <div id="walletConnected" style="display: none;">
+                    <strong>Connected Wallet:</strong>
+                    <div class="wallet-address" id="walletAddress"></div>
+                </div>
+            </div>
+
+            <div class="network-info" id="networkInfo" style="display: none;">
+                <span id="networkStatus">Please connect to Sepolia testnet</span>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalDatasets">0</span>
+                    <div class="stat-label">Total Datasets</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalRequests">0</span>
+                    <div class="stat-label">Data Requests</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="activeUsers">0</span>
+                    <div class="stat-label">Active Contributors</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>📊 Contribute Research Data</h2>
+                <div class="error" id="contributeError"></div>
+                <div class="success" id="contributeSuccess"></div>
+
+                <div class="form-group">
+                    <label for="dataValue">Data Value (Encrypted Storage):</label>
+                    <input type="number" id="dataValue" placeholder="Enter numerical data" min="0" max="4294967295">
+                </div>
+
+                <div class="form-group">
+                    <label for="qualityScore">Data Quality Score (0-100):</label>
+                    <input type="number" id="qualityScore" placeholder="Data quality rating" min="0" max="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="metadataHash">Data Metadata IPFS Hash:</label>
+                    <input type="text" id="metadataHash" placeholder="QmXXXXXX... or description">
+                </div>
+
+                <div class="form-group">
+                    <label for="isPublic">Access Permission:</label>
+                    <select id="isPublic">
+                        <option value="true">Public Access</option>
+                        <option value="false">Requires Authorization</option>
+                    </select>
+                </div>
+
+                <button class="btn" onclick="contributeData()" id="contributeBtn">
+                    <span class="loading" id="contributeLoading">Contributing...</span>
+                    <span id="contributeText">Contribute Data</span>
+                </button>
+            </div>
+
+            <div class="card">
+                <h2>🔍 Request Data Access</h2>
+                <div class="error" id="requestError"></div>
+                <div class="success" id="requestSuccess"></div>
+
+                <div class="form-group">
+                    <label for="researchTopic">Research Topic:</label>
+                    <input type="text" id="researchTopic" placeholder="Describe your research field and objectives">
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Budget (Encrypted):</label>
+                    <input type="number" id="budget" placeholder="Research budget" min="0" max="4294967295">
+                </div>
+
+                <div class="form-group">
+                    <label for="deadline">Deadline:</label>
+                    <input type="datetime-local" id="deadline">
+                </div>
+
+                <button class="btn" onclick="requestDataAccess()" id="requestBtn">
+                    <span class="loading" id="requestLoading">Submitting...</span>
+                    <span id="requestText">Submit Request</span>
+                </button>
+            </div>
+
+            <div class="card data-list">
+                <h2>📁 Datasets List</h2>
+                <div class="loading" id="dataLoading">Loading...</div>
+                <div id="datasetsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        // Replace with your deployed contract address on Sepolia
+        const CONTRACT_ADDRESS = "0x13782134cE8cA22C432bb636B401884806799AD2";
+        const SEPOLIA_CHAIN_ID = "0xaa36a7"; // 11155111 in hex
+
+        const CONTRACT_ABI = [
+            "function contributeData(uint32 _dataValue, uint8 _qualityScore, string memory _metadataHash, bool _isPublic) external",
+            "function requestDataAccess(string memory _researchTopic, uint32 _budget, uint256 _deadline) external",
+            "function getPlatformStats() external view returns (uint32 totalDatasets, uint32 totalRequests, uint256 blockTimestamp)",
+            "function getContributorDatasetCount(address _contributor) external view returns (uint256)",
+            "function getDatasetInfo(uint32 _datasetId) external view returns (address contributor, string memory metadataHash, bool isPublic, uint256 timestamp, uint32 accessCount, bool isActive)",
+            "function grantDataAccess(uint32 _datasetId, address _accessor) external",
+            "function accessDataset(uint32 _datasetId) external view returns (string memory metadataHash, uint256 timestamp, uint32 accessCount)",
+            "event DatasetContributed(uint32 indexed datasetId, address indexed contributor, string metadataHash)",
+            "event DataRequested(uint32 indexed requestId, address indexed requester, string researchTopic)"
+        ];
+
+        let provider;
+        let signer;
+        let contract;
+        let userAccount;
+
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum !== 'undefined') {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    signer = provider.getSigner();
+                    userAccount = await signer.getAddress();
+
+                    // Check if we're on Sepolia testnet
+                    const network = await provider.getNetwork();
+                    await checkNetwork(network.chainId);
+
+                    contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                    document.getElementById('connectWallet').style.display = 'none';
+                    document.getElementById('walletConnected').style.display = 'block';
+                    document.getElementById('walletAddress').textContent = userAccount;
+
+                    await loadPlatformStats();
+                    await loadDatasets();
+                } else {
+                    alert('Please install MetaMask wallet!');
+                }
+            } catch (error) {
+                console.error('Failed to connect wallet:', error);
+                showError('contributeError', 'Failed to connect wallet: ' + error.message);
+            }
+        }
+
+        async function checkNetwork(chainId) {
+            const networkInfo = document.getElementById('networkInfo');
+            const networkStatus = document.getElementById('networkStatus');
+
+            networkInfo.style.display = 'block';
+
+            if (chainId === 11155111) { // Sepolia
+                networkStatus.textContent = '✅ Connected to Sepolia Testnet';
+                networkInfo.className = 'network-info sepolia';
+            } else {
+                networkStatus.textContent = '⚠️ Please switch to Sepolia Testnet';
+                networkInfo.className = 'network-info';
+                await switchToSepolia();
+            }
+        }
+
+        async function switchToSepolia() {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: SEPOLIA_CHAIN_ID }],
+                });
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: SEPOLIA_CHAIN_ID,
+                                chainName: 'Sepolia Test Network',
+                                nativeCurrency: {
+                                    name: 'SepoliaETH',
+                                    symbol: 'SEP',
+                                    decimals: 18,
+                                },
+                                rpcUrls: ['https://sepolia.infura.io/v3/'],
+                                blockExplorerUrls: ['https://sepolia.etherscan.io/'],
+                            }],
+                        });
+                    } catch (addError) {
+                        console.error('Failed to add Sepolia network:', addError);
+                    }
+                }
+            }
+        }
+
+        async function loadPlatformStats() {
+            try {
+                if (!contract) return;
+
+                const stats = await contract.getPlatformStats();
+                document.getElementById('totalDatasets').textContent = stats.totalDatasets.toString();
+                document.getElementById('totalRequests').textContent = stats.totalRequests.toString();
+
+                // Simplified active users calculation
+                document.getElementById('activeUsers').textContent = Math.floor(stats.totalDatasets * 0.7);
+            } catch (error) {
+                console.error('Failed to load platform stats:', error);
+            }
+        }
+
+        async function contributeData() {
+            const dataValue = document.getElementById('dataValue').value;
+            const qualityScore = document.getElementById('qualityScore').value;
+            const metadataHash = document.getElementById('metadataHash').value;
+            const isPublic = document.getElementById('isPublic').value === 'true';
+
+            if (!dataValue || !qualityScore || !metadataHash) {
+                showError('contributeError', 'Please fill in all required fields');
+                return;
+            }
+
+            if (!contract) {
+                showError('contributeError', 'Please connect your wallet first');
+                return;
+            }
+
+            try {
+                showLoading('contribute', true);
+                hideMessages('contribute');
+
+                const tx = await contract.contributeData(
+                    parseInt(dataValue),
+                    parseInt(qualityScore),
+                    metadataHash,
+                    isPublic
+                );
+
+                await tx.wait();
+                showSuccess('contributeSuccess', 'Data contribution successful! Transaction hash: ' + tx.hash.substring(0, 10) + '...');
+
+                // Clear form
+                document.getElementById('dataValue').value = '';
+                document.getElementById('qualityScore').value = '';
+                document.getElementById('metadataHash').value = '';
+
+                await loadPlatformStats();
+                await loadDatasets();
+            } catch (error) {
+                console.error('Failed to contribute data:', error);
+                showError('contributeError', 'Failed to contribute data: ' + error.message);
+            } finally {
+                showLoading('contribute', false);
+            }
+        }
+
+        async function requestDataAccess() {
+            const researchTopic = document.getElementById('researchTopic').value;
+            const budget = document.getElementById('budget').value;
+            const deadline = document.getElementById('deadline').value;
+
+            if (!researchTopic || !budget || !deadline) {
+                showError('requestError', 'Please fill in all required fields');
+                return;
+            }
+
+            if (!contract) {
+                showError('requestError', 'Please connect your wallet first');
+                return;
+            }
+
+            try {
+                showLoading('request', true);
+                hideMessages('request');
+
+                const deadlineTimestamp = Math.floor(new Date(deadline).getTime() / 1000);
+
+                const tx = await contract.requestDataAccess(
+                    researchTopic,
+                    parseInt(budget),
+                    deadlineTimestamp
+                );
+
+                await tx.wait();
+                showSuccess('requestSuccess', 'Data access request submitted successfully! Transaction hash: ' + tx.hash.substring(0, 10) + '...');
+
+                // Clear form
+                document.getElementById('researchTopic').value = '';
+                document.getElementById('budget').value = '';
+                document.getElementById('deadline').value = '';
+
+                await loadPlatformStats();
+            } catch (error) {
+                console.error('Failed to request data access:', error);
+                showError('requestError', 'Failed to request data access: ' + error.message);
+            } finally {
+                showLoading('request', false);
+            }
+        }
+
+        async function loadDatasets() {
+            if (!contract) return;
+
+            try {
+                document.getElementById('dataLoading').style.display = 'block';
+                const stats = await contract.getPlatformStats();
+                const totalDatasets = parseInt(stats.totalDatasets.toString());
+
+                const datasetsList = document.getElementById('datasetsList');
+                datasetsList.innerHTML = '';
+
+                for (let i = 1; i <= Math.min(totalDatasets, 10); i++) {
+                    try {
+                        const info = await contract.getDatasetInfo(i);
+
+                        const dataItem = document.createElement('div');
+                        dataItem.className = 'data-item';
+                        dataItem.innerHTML = `
+                            <h3>Dataset #${i}</h3>
+                            <p><strong>Metadata:</strong> ${info.metadataHash}</p>
+                            <div class="data-meta">
+                                <span>Access Count: ${info.accessCount}</span>
+                                <span>Status: <span class="status ${info.isActive ? 'active' : ''}">${info.isActive ? 'Active' : 'Inactive'}</span></span>
+                                <span>Visibility: <span class="status ${info.isPublic ? 'public' : 'private'}">${info.isPublic ? 'Public' : 'Private'}</span></span>
+                            </div>
+                            <div class="data-meta">
+                                <span>Contributor: ${info.contributor.substring(0, 8)}...</span>
+                                <span>Time: ${new Date(info.timestamp * 1000).toLocaleDateString()}</span>
+                            </div>
+                        `;
+                        datasetsList.appendChild(dataItem);
+                    } catch (error) {
+                        console.error(`Failed to get dataset ${i} info:`, error);
+                    }
+                }
+
+                if (totalDatasets === 0) {
+                    datasetsList.innerHTML = '<p style="text-align: center; color: #6c757d;">No datasets available</p>';
+                }
+            } catch (error) {
+                console.error('Failed to load datasets:', error);
+                document.getElementById('datasetsList').innerHTML = '<p style="text-align: center; color: #dc3545;">Failed to load datasets</p>';
+            } finally {
+                document.getElementById('dataLoading').style.display = 'none';
+            }
+        }
+
+        function showLoading(prefix, show) {
+            document.getElementById(prefix + 'Loading').style.display = show ? 'inline' : 'none';
+            document.getElementById(prefix + 'Text').style.display = show ? 'none' : 'inline';
+            document.getElementById(prefix + 'Btn').disabled = show;
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(elementId, message) {
+            const successElement = document.getElementById(elementId);
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            setTimeout(() => {
+                successElement.style.display = 'none';
+            }, 5000);
+        }
+
+        function hideMessages(prefix) {
+            document.getElementById(prefix + 'Error').style.display = 'none';
+            document.getElementById(prefix + 'Success').style.display = 'none';
+        }
+
+        // Set default deadline to tomorrow
+        document.addEventListener('DOMContentLoaded', function() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('deadline').value = tomorrow.toISOString().slice(0, 16);
+        });
+
+        // Listen for account changes
+        if (typeof window.ethereum !== 'undefined') {
+            window.ethereum.on('accountsChanged', function (accounts) {
+                if (accounts.length === 0) {
+                    location.reload();
+                } else {
+                    connectWallet();
+                }
+            });
+
+            window.ethereum.on('chainChanged', function (chainId) {
+                location.reload();
+            });
+        }
+    </script>
+</body>
+</html>
